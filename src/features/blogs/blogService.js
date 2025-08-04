@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { getToken } from '../auth/authService';
 
-const API_URL = 'http://localhost:8050/api/blogs';
+const API_URL = 'http://localhost:8050/api/blog';
 
-export const getAllBlogs = async () => {
-  const res = await axios.get(API_URL);
+export const getAllBlogs = async (page = 1, limit = 2) => {
+  const res = await axios.get(`${API_URL}?page=${page}&limit=${limit}`);
   return res.data;
 };
 
@@ -45,12 +45,31 @@ export const createBlog = async (blogData) => {
   return res.data;
 };
 
-export const getMyBlogs = async () => {
+export const getMyBlogs = async (page = 1, limit = 6) => {
   const token = getToken();
-  const res = await axios.get(`${API_URL}/my-blogs`, {
+  const res = await axios.get(`${API_URL}/my-blogs?page=${page}&limit=${limit}`, {
     headers: {
       Authorization: `Bearer ${token}`
     },
   });
+  return res.data;
+};
+
+export const patchPublishStatues = async (blogId) => {
+  const token = getToken();
+  const res = await axios.patch(
+    `${API_URL}/${blogId}/toggle-publish`, 
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return res.data;
+};
+
+export const getSearchedBlogs = async (page = 1, limit = 10, query = '') => {
+  const res = await axios.get(`/api/blog?query=${encodeURIComponent(query)}&page=${page}&limit=${limit}`);
   return res.data;
 };

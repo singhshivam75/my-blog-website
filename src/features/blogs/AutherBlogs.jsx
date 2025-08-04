@@ -7,24 +7,43 @@ import { getCurrentUser } from '../auth/authService';
 const AutherBlogs = () => {
 
   const [blogs, setBlogs] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
   const navigate = useNavigate();
   const currentUser = getCurrentUser();
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const data = await getMyBlogs();
+    loadBlogs(page);
+  }, [page]);
+
+  const loadBlogs = async (currentPage) => {
+    try {
+      const data = await getMyBlogs(currentPage, 6);
+
+      if (currentPage === 1) {
         setBlogs(data.blogs || []);
-      } catch (err) {
-        toast.error('Failed to fetch your blogs.', err)
-      } finally {
-        setLoading(false);
+      } else {
+        setBlogs((prev) => [...prev, ...(data.blogs || [])]);
       }
+
+      const loadedCount = (currentPage - 1) * 6 + (data.blogs?.length || 0);
+      if (loadedCount >= data.total) {
+        setHasMore(false);
+      }
+
+    } catch (err) {
+      toast.error('Failed to fetch your blogs.', err);
+    } finally {
+      setLoading(false);
     }
-    fetchBlogs();
-  }, []);
+  }
+
+
+  const handleLoadMore = () => {
+    setPage((prev) => prev + 1);
+  };
 
   const handleDelete = async (id) => {
     const blog = blogs.find((b) => b._id === id);
@@ -76,7 +95,7 @@ const AutherBlogs = () => {
                   className='object-cover w-full h-48 mb-4 rounded-md'
                 />
               )}
-              <h3 className='mb-2 text-xl font-semibold'>{blog.title}</h3>
+              <h3 className='mb-2 text-xl font-semibold'>{(blog.title).slice(0, 70)}...</h3>
               <p className="mb-4 text-sm text-gray-600">
                 {(blog.description || '').slice(0, 100)}...
               </p>
@@ -87,6 +106,7 @@ const AutherBlogs = () => {
                 >
                   Edit
                 </button>
+
                 <button
                   onClick={() => handleDelete(blog._id)}
                   disabled={deletingId === blog._id}
@@ -102,6 +122,17 @@ const AutherBlogs = () => {
           ))}
         </div>
       )}
+      {hasMore && (
+        <div className='mt-6 text-center'>
+          <button
+            onClick={handleLoadMore}
+            className='px-6 py-2 text-white bg-green-600 rounded-md hover:bg-green-700'
+          >
+            Load More
+          </button>
+        </div>
+      )}
+
     </div>
   )
 }

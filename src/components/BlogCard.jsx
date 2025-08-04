@@ -21,10 +21,10 @@ const BlogCard = ({ blog }) => {
         </p>
       )}
 
-      <div className="text-right">
+      <div className="pt-4 pb-2 mt-auto text-right ">
         <Link
           to={`/blog/${_id}`}
-          className="inline-block text-sm font-semibold text-blue-600 transition duration-200 hover:text-blue-800"
+          className="inline-block px-4 text-sm font-semibold text-blue-600 transition duration-200 hover:text-blue-800"
         >
           Read More →
         </Link>

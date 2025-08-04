@@ -23,6 +23,7 @@ export default function Navbar() {
           <Link to="/my-blogs" className="transition hover:text-blue-600">My Blogs</Link>
         </>
       )}
+      <Link to="/contact" className="transition hover:text-blue-600">Contact</Link>
 
       {isAuthenticated ? (
         <button onClick={handleLogout} className="transition hover:text-red-600">Logout</button>
@@ -39,7 +40,7 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 bg-white shadow-md">
       <div className="flex items-center justify-between px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <Link to="/" className="text-4xl font-bold text-blue-700">Blog<span className='text-blue-900'>Code</span></Link>
-
+        
         <div className="items-center hidden space-x-8 text-lg font-bold text-gray-900 md:flex">
           {navLinks}
         </div>

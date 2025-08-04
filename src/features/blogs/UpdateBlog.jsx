@@ -3,12 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getBlogById, updateBlogById } from './blogService';
 import { getCurrentUser } from '../auth/authService';
 import { toast } from 'react-toastify';
+import PublishToggleButton from './publishToggleButton';
 
 const UpdateBlog = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [blog, setBlog] = useState(null);
-  const [formData, setFormData] = useState({ title: '', description: '' });
+  const [formData, setFormData] = useState({ title: '', description: '', image: null });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -17,7 +18,7 @@ const UpdateBlog = () => {
       try {
         const data = await getBlogById(id);
         setBlog(data.blog);
-        setFormData({ title: data.blog.title, description: data.blog.description });
+        setFormData({ title: data.blog.title, description: data.blog.description, image: data.blog.image });
       } catch {
         setError('Unable to load blog.');
       }
@@ -40,11 +41,28 @@ const UpdateBlog = () => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData((prev) => ({ ...prev, image: file }));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     try {
-      await updateBlogById(id, formData);
+      const payload = new FormData();
+      payload.append('title', formData.title);
+      payload.append('description', formData.description);
+
+      // Append image only if it exists (either new or existing)
+      if (formData.image && typeof formData.image !== 'string') {
+        payload.append('image', formData.image);
+      }
+
+      await updateBlogById(id, payload);
       navigate(`/blog/${id}`);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to update blog');
@@ -78,6 +96,7 @@ const UpdateBlog = () => {
             required
           />
         </div>
+
         <div>
           <label className="block mb-1 font-semibold">Description</label>
           <textarea
@@ -89,7 +108,25 @@ const UpdateBlog = () => {
             required
           />
         </div>
-        <div className="text-right">
+        {blog.image && (
+          <div>
+            <label className="block mb-1 font-semibold">Update Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="w-full px-4 py-2 border rounded"
+            />
+            <div className="mt-2">
+              <img src={blog.image} alt="Current blog" className="w-48 rounded-md" />
+            </div>
+          </div>
+        )}
+        <div className="flex justify-end gap-4">
+          <PublishToggleButton
+            blogId={blog._id}
+            initialStatus={blog.isPublished}
+          />
           <button
             type="submit"
             disabled={loading}
@@ -99,6 +136,7 @@ const UpdateBlog = () => {
             {loading ? 'Updating...' : 'Update'}
           </button>
         </div>
+
       </form>
     </div>
   );
