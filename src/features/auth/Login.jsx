@@ -37,8 +37,9 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-20 bg-white p-6 rounded shadow">
-      <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+    <>
+    <div className="max-w-md p-6 mx-auto mt-20 bg-white rounded shadow">
+      <h2 className="mb-6 text-2xl font-bold text-center">Login</h2>
       <form onSubmit={handleLogin} className="space-y-4">
         <div>
           <label>Email</label>
@@ -63,13 +64,15 @@ const Login = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          className="w-full py-2 text-white transition bg-blue-600 rounded hover:bg-blue-700"
         >
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
     </div>
+    </>
   );
 };
+
 
 export default Login;

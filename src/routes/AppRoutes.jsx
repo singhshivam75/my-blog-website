@@ -5,6 +5,7 @@ import Home from '../pages/Home';
 import About from '../pages/About';
 import Contact from '../pages/Contact';
 import NotFound from '../pages/NotFound';
+import SearchPage from '../pages/SearchPage';
 
 import Login from '../features/auth/Login';
 import Signup from '../features/auth/Signup';
@@ -25,6 +26,7 @@ const AppRoutes = () => {
       <Route path="/blog/:id" element={<BlogDetail />} />
       <Route path="/my-blogs" element={<AutherBlogs />} />
       <Route path="/update-blog" element={<UpdateBlog />} />
+      <Route path="/search" element={<SearchPage />} />
 
       <Route
         path="/create-blog"
