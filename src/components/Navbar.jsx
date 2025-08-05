@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
+import SearchBar from './SearchBar';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -13,8 +14,18 @@ export default function Navbar() {
     navigate('/login');
   };
 
+  const handleSearch = (query) => {
+    if (query.trim()) {
+      navigate(`/search?query=${query}`);
+    }
+  };
+
   const navLinks = (
     <>
+      <div>
+        <SearchBar onSearch={handleSearch} />
+      </div>
+
       <Link to="/" className="transition hover:text-blue-600">Home</Link>
 
       {isAuthenticated && (
@@ -38,10 +49,10 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-md">
-      <div className="flex items-center justify-between px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div className="flex items-center justify-between px-4 py-5 mx-auto sm:px-6 lg:px-8">
         <Link to="/" className="text-4xl font-bold text-blue-700">Blog<span className='text-blue-900'>Code</span></Link>
-        
-        <div className="items-center hidden space-x-8 text-lg font-bold text-gray-900 md:flex">
+
+        <div className="items-center hidden gap-10 text-lg font-bold text-gray-900 md:flex">
           {navLinks}
         </div>
 
