@@ -56,7 +56,6 @@ exports.getBlogs = async (req, res, next) => {
 };
 
 
-
 exports.getBlog = async (req, res, next) => {
   try {
     const blog = await blogService.getBlogById(req.params.id);

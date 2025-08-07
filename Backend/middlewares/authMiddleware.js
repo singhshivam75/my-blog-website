@@ -1,8 +1,12 @@
 const Joi = require("joi");
 
-const signupSchema = Joi.object({
-  username: Joi.string().min(3).max(50).required(),
+const otpSignupSchema = Joi.object({
   email: Joi.string().email().required(),
+  otp: Joi.string().length(6).pattern(/^[0-9]+$/).required().messages({
+    "string.pattern.base": "OTP must be a 6-digit number.",
+    "string.length": "OTP must be exactly 6 digits.",
+  }),
+  username: Joi.string().min(3).max(50).required(),
   password: Joi.string().min(6).max(20).required(),
 }).unknown(false);
 
@@ -11,8 +15,8 @@ const loginSchema = Joi.object({
   password: Joi.string().required(),
 }).unknown(false);
 
-const validateSignup = (req, res, next) => {
-  const { error } = signupSchema.validate(req.body);
+const validateOtpSignup = (req, res, next) => {
+  const { error } = otpSignupSchema.validate(req.body);
   if (error) {
     return res.status(400).json({
       message: "Validation error",
@@ -33,4 +37,4 @@ const validateLogin = (req, res, next) => {
   next();
 };
 
-module.exports = { validateSignup, validateLogin };
+module.exports = { validateOtpSignup, validateLogin };

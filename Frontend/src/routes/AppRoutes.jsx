@@ -15,7 +15,7 @@ import CreateBlog from '../features/blogs/CreateBlog';
 
 import ProtectedRoute from '../pages/ProtectedRoute';
 import UpdateBlog from '../features/blogs/UpdateBlog';
-import DeleteBlog from '../features/blogs/DeleteBlog';
+// import DeleteBlog from '../features/blogs/DeleteBlog';
 import AutherBlogs from '../features/blogs/AutherBlogs';
 
 const AppRoutes = () => {
@@ -44,14 +44,14 @@ const AppRoutes = () => {
         }
       />
 
-      <Route
+      {/* <Route
         path="/blog/:id/delete"
         element={
           <ProtectedRoute>
             <DeleteBlog />
           </ProtectedRoute>
         }
-      />
+      /> */}
 
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />

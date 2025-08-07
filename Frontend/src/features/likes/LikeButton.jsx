@@ -53,28 +53,29 @@ const LikeButton = ({ blogId }) => {
       <button
         onClick={handleToggle}
         disabled={loading}
-        className={`bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700 transition ${
-          loading ? 'opacity-50 cursor-not-allowed' : ''
-        }`}
+        className={`bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700 transition ${loading ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
       >
         ❤️ Like
       </button>
-      <span className="ml-3 text-gray-700 font-medium">{likes} {likes === 1 ? 'like' : 'likes'}</span>
+      <span className="ml-3 font-medium text-gray-700">{likes} {likes === 1 ? 'like' : 'likes'}</span>
 
       <button
         onClick={handleShowUsers}
-        className="ml-4 text-blue-600 underline hover:text-blue-800 text-sm"
+        className="ml-4 text-sm text-blue-600 underline hover:text-blue-800"
       >
         {showUsers ? 'Hide users' : 'View users'}
       </button>
 
       {showUsers && (
-        <ul className="mt-3 pl-5 list-disc text-sm text-gray-700">
+        <ul className="pl-5 mt-3 text-sm text-gray-700 list-disc">
           {likedUsers.length === 0 ? (
             <li>No users have liked this blog yet.</li>
           ) : (
-            likedUsers.map((user) => (
-              <li key={user._id}>{user.username} ({user.email})</li>
+            likedUsers.map((user, index) => (
+              user?.username && user?.email ? (
+                <li key={user._id || index}>{user.username} ({user.email})</li>
+              ) : null
             ))
           )}
         </ul>
