@@ -9,18 +9,19 @@ const BlogList = () => {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  const fetchBlogs = async (pageNum = 1) => {
-    try {
-      const data = await getAllBlogs(pageNum, 9);
-      setBlogs(prev => [...prev, ...data.blogs]);
-      setTotalPages(data.totalPages);
-    } catch (error) {
-      console.error("Failed to fetch blogs:", error);
-    } finally {
-      setLoading(false);
-      setLoadingMore(false);
-    }
-  };
+const fetchBlogs = async (pageNum = 1) => {
+  try {
+    const data = await getAllBlogs(pageNum, 9);
+
+    setBlogs(prev => pageNum === 1 ? data.blogs : [...prev, ...data.blogs]); // 🧠 Key fix
+    setTotalPages(data.totalPages);
+  } catch (error) {
+    console.error("Failed to fetch blogs:", error);
+  } finally {
+    setLoading(false);
+    setLoadingMore(false);
+  }
+};
 
   useEffect(() => {
     fetchBlogs(page);
@@ -39,7 +40,7 @@ const BlogList = () => {
 
       {loading ? (
         <p className="text-center text-gray-500">Loading blogs...</p>
-      ) : blogs.length > 0 ? (
+      ) : 0 < blogs.length ? (
         <>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {blogs.map((blog) => (

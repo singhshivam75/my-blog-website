@@ -13,6 +13,7 @@ exports.findBlogById = (id) => Blog.findById(id).populate('author', 'username em
 exports.findBlogsByAuthor = (authorId, page = 1, limit = 6) => {
   const skip = (page - 1) * limit;
   return Blog.find({ author: authorId })
+    .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)
     .populate('author', 'username email');
@@ -30,7 +31,7 @@ exports.deleteBlog = (blog) => blog.deleteOne();
 
 // Only fetch published blogs
 exports.findPaginatedBlogs = (skip, limit) =>
-  Blog.find({ isPublished: true }) 
+  Blog.find({ isPublished: true })
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)
